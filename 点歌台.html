@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+    li{border-bottom:1px dashed #000; width:150px; margin:10px;  }
+    .cur{background:url(play.gif) no-repeat 130px 0;}
+    .mute{width:50px; height:50px; border-radius:50%; border:1px solid #000; line-height:50px; text-align:center; color:purple;}
+
+</style>
+<script>
+    window.onload=function(){
+        var aLi=document.querySelectorAll('li');
+        var oA=document.querySelector('audio');
+        var aS=['千千阙歌','时间都去哪了','小苹果','夜的钢琴曲','雨的印记'];
+        var oMute=document.querySelector('.mute');
+        var iNow=0;
+        for(var i=0;i<aLi.length;i++){
+            (function(index){
+                aLi[i].ondblclick=function(){
+                    iNow=index;
+                    tab();
+
+                };
+
+            })(i);
+        }
+        function tab(){
+            for(var i=0;i<aLi.length;i++){
+                aLi[i].className='';
+            }
+            aLi[iNow].className='cur'
+            oA.src='mp3/'+aS[iNow]+'.mp3';
+            oA.play();
+        }
+       var bm=false;
+        oMute.onclick=function(){
+            if(bm){
+                oMute.innerHTML='不静音';
+                oA.muted=true;
+            }else{
+
+                oMute.innerHTML='静音';
+                oA.muted=false;
+            }
+            bm=!bm;
+        }
+
+
+    };
+
+</script>
+</head>
+<body>
+    <audio src="mp3/千千阙歌.mp3" autoplay></audio>
+     <ol>
+        <li class="cur">千千阙歌</li>
+        <li>时间都去哪了</li>
+        <li>小苹果</li>
+        <li>夜的钢琴曲</li>
+        <li>雨的印记</li>
+    </ol>
+    <div class="mute">静音</div>
+
+</body>
+</html>

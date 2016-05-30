@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+    *{padding:0; margin:0;}
+    .box{width:100%; height:50px; background:#000; position:relative;}
+    .v_box{width:700px; height:5px; background:#fff;  position:absolute; top:10px; left:200px;}
+    .v_bar{width:0; height:5px; background:blue; position:absolute; top:0; left:0; }
+    .v_btn{width:5px; height:14px; background:red; position:absolute; top:50%; left:0; margin-top:-7px;}
+    .time_box{color:#fff; position:absolute;  top:-7px; right:-100px; }
+    .s_box{width:300px; height:5px; position:absolute; top:10px; right:50px; background:#fff;}
+    .s_bar{width:0; height:5px; background:blue; position:absolute; top:0; left:0; }
+    .s_btn{width:5px; height:14px; background:red; position:absolute; top:50%; left:0; margin-top:-7px;}
+</style>
+<script>
+    function toDo(iNum){
+        return iNum<10?'0'+iNum:''+iNum;
+    }
+    function getCnTime(s){
+        return toDo(parseInt(s/60))+':'+toDo(parseInt(s%60));
+
+    }
+    window.onload=function(){
+        var oV=document.getElementById('v1');
+        var oPlay=document.querySelector('.play');
+        var oPause=document.querySelector('.pause');
+        var oStop=document.querySelector('.stop');
+
+        var oS_box=document.querySelector('.s_box');
+        var oS_bar=document.querySelector('.s_bar');
+        var oS_btn=document.querySelector('.s_btn');
+
+        var oV_box=document.querySelector('.v_box');
+        var oV_bar=document.querySelector('.v_bar');
+        var oV_btn=document.querySelector('.v_btn');
+
+        var oTime_box=document.querySelector('.time_box');
+
+        oPlay.onclick=function(){
+            oV.play();
+        };
+        oPause.onclick=function(){
+            oV.pause();
+        };
+        oStop.onclick=function(){
+            oV.pause();
+            oV.currentTime=0;
+        };
+
+        oS_btn.onmousedown=function(ev){
+            var disX=ev.pageX-oS_btn.offsetLeft;
+            document.onmousemove=function(ev){
+                var l=ev.pageX-disX;
+                if(l<0){
+                    l=0;
+                }else if(l>oS_box.offsetWidth-oS_btn.offsetWidth){
+                    l=oS_box.offsetWidth-oS_btn.offsetWidth;
+                }
+                oS_btn.style.left=l+'px';
+                var scale=l/(oS_box.offsetWidth-oS_btn.offsetWidth);
+                oS_bar.style.width=scale*100+'%';
+                oV.valume=scale;
+            };
+            document.onmouseup=function(){
+                document.onmousemove=null;
+                document.onmouseup=null;
+            };
+            return false;
+        };
+
+        oV.ontimeupdate=function(){
+
+            var scale=oV.currentTime/oV.duration;
+            oV_btn.style.left=oV_box.offsetWidth*scale+'px';
+            oV_bar.style.width=scale*100+'%';
+            oTime_box.innerHTML=getCnTime(oV.currentTime)+'/'+getCnTime(oV.duration);
+        };
+
+        oV_btn.onmousedown=function(ev){
+            var disX=ev.pageX-oV_btn.offsetLeft;
+            document.onmousemove=function(ev){
+                var l=ev.pageX-disX;
+                if(l<0){
+                    l=0;
+                }else if(l>oV_box.offsetWidth-oV_btn.offsetWidth){
+                    l=oV_box.offsetWidth-oV_btn.offsetWidth;
+                };
+                oV_btn.style.left=l+'px';
+                var scale=l/(oV_box.offsetWidth-oV_btn.offsetWidth);
+                oV_bar.style.width=scale*100+'%';
+                oV.currentTime=oV.duration*scale;
+                console.log(oV.currentTime);
+            };
+            document.onmouseup=function(){
+                document.onmousemove=null;
+                document.onmouseup=null;
+            };
+            return false;
+        };
+
+        oV_box.onclick=function(ev){
+            oV_btn.style.left=ev.pageX;
+        }
+
+
+
+    };
+</script>
+</head>
+<body>
+    <video src="2016年5月30日李瑞辰/[电影天堂-www.dy2018.net]时间的风景.720p.音乐风景片.mkv" id="v1" ></video>
+    <div class="box">
+        <input type="button" value="播放" class="play">
+        <input type="button" value="暂停" class="pause">
+        <input type="button" value="停止" class="stop">
+        <div class="v_box">
+            <div class="v_bar"></div>
+            <div class="v_btn"></div>
+            <div class="time_box">00:00/00:00</div>
+        </div>
+
+        <div class="s_box">
+            <div class="s_bar"></div>
+            <div class="s_btn"></div>
+        </div>
+    </div>
+</body>
+</html>
